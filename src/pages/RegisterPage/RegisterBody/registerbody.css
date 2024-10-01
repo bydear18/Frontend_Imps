@@ -1,0 +1,122 @@
+@media screen and (min-width: 1080px){
+    #signIn {
+        text-decoration: underline;
+        width: 4.5vw;
+    }
+
+    #signIn:hover{
+        color: var(--PrimaryColor);
+    }
+}
+
+@media screen and (min-width: 1368px){
+    #signIn {
+        text-decoration: underline;
+        width: 3vw;
+    }
+
+    #signIn:hover{
+        color: var(--PrimaryColor);
+    }
+}
+
+@media screen and (min-width: 1080px){
+    #regLogCon {
+        background-color: var(--SecondaryColor);
+        border-radius: 0.6vw;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 28vw;
+        height: 47vw;
+        padding:5vh;
+        margin:auto;
+        align-items: center;
+        margin-top: 5vw;
+    }
+}
+
+@media screen and (min-width: 1368px){
+    #regLogCon {
+        background-color: var(--SecondaryColor);
+        border-radius: 0.6vw;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 28vw;
+        height: 44vw;
+        padding:5vh;
+        margin:auto;
+        align-items: center;
+        margin-top: 2vw;
+    }
+}
+
+@media screen and (min-width:1080px){
+    #regQues {
+        margin-top: -1vw;
+        margin-bottom: -0.03vw;
+        font-weight:bold;
+        font-size: 1vw;
+        color: var(--PrimaryColor);
+    }
+}
+
+@media screen and (min-width: 1368px){
+    #regQues {
+        margin-bottom: -0.03vw;
+        font-weight:bold;
+        font-size: 0.8vw;
+        color: var(--PrimaryColor);
+    }
+}
+
+#emailSym {
+    scale: 1.4;
+}
+
+.regInput {
+    margin-left: 1.6vw;
+}
+
+.regLine {
+    margin-top: 0.3vw;
+}
+
+.regShad {
+    border: 1px solid #000;
+    border-radius: 0.5vw; 
+    padding: 1em; 
+    font-size: 1em; 
+    color: #1d1c1c;
+    background-color: white; 
+    appearance: none;
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
+    width: 100%;
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+}
+
+.regShad:hover {
+    border-color: var(--PrimaryColor);
+}
+
+.regShad:focus {
+    outline: none; 
+    border-color: var(--PrimaryColor);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); 
+}
+.select-wrapper {
+    position: relative; 
+    display: inline-block;
+}
+
+.select-wrapper::after {
+    content: '▼'; 
+    position: absolute;
+    right: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+}
+.regShad:disabled {
+    background-color: #f0f0f0; 
+    cursor: not-allowed;
+    opacity: 0.6;
+}
