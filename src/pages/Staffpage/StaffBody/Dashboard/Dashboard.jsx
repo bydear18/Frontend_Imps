@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import './Dashboard.css';
+import { FaFileAlt, FaUser, FaCheckCircle } from 'react-icons/fa';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const Dashboard = () => {
+  const [date, setDate] = useState(new Date());
   const [statistics, setStatistics] = useState({
     totalEmployees: 0,
     totalStaff: 0,
@@ -11,7 +15,6 @@ const Dashboard = () => {
     rejectedRequests: 0,
   });
 
-  // Fetch employee counts
   useEffect(() => {
     fetch("http://localhost:8080/services/getEmployeeCounts")
       .then((response) => response.json())
@@ -40,37 +43,70 @@ const Dashboard = () => {
       .catch((error) => console.error("Error fetching request counts:", error));
   }, []);
   
-
   return (
-    <div className="dashboard">
-      <div className="stats-grid">
-        <div className="stat-card" style={{backgroundColor: '#a5a5a3'}}>
-          <h2>Total Employees</h2>
-          <p className="stat-number">{statistics.totalEmployees}</p>
+    <div className="dashboard-container">
+      <div className="box-container">
+        <div className="box">
+          <div className="content-box">
+            <FaUser className="icon" />
+            <p className="box-text">Employees</p>
+          </div>
+          <div className="extra-box">
+          <p className='count'>{statistics.totalEmployees}</p>
+          </div>
         </div>
-        <div className="stat-card" style={{backgroundColor: '#44a575'}}>
-          <h2>Total Staff</h2>
-          <p className="stat-number">{statistics.totalStaff}</p>
+        <div className="box">
+          <div className="content-box">
+            <FaFileAlt style={{color: '#818c99'}} className="icon" />
+            <p className="box-text">Requested Files</p>
+          </div>
+          <div className="extra-box">
+          <p className='count'>{statistics.completedRequests + statistics.inProgressRequests + statistics.pendingRequests + statistics.rejectedRequests}</p>
+          </div>
+        </div>
+        <div className="box">
+          <div className="content-box">
+            <FaUser style={{color: '#5b4cdd'}} className="icon" />
+            <p className="box-text">Staff</p>
+          </div>
+          <div className="extra-box">
+          <p className='count'>{statistics.totalStaff}</p>
+          </div>
         </div>
       </div>
+      <div className="box-container" style={{marginTop: '-4vw'}}>
+        <div className="box">
+          <div className="content-box">
+            <FaCheckCircle style={{color: '#4a90e2'}} className="icon" />
+            <p className="box-text">In Progress(Pending)</p>
+          </div>
+          <div className="extra-box">
+          <p className='count'>{statistics.inProgressRequests + statistics.pendingRequests}</p>
+          </div>
+        </div>
+        <div className="box">
+          <div className="content-box">
+            <FaCheckCircle style={{color: '#08af5c'}} className="icon" />
+            <p className="box-text">Approved Requests</p>
+          </div>
+          <div className="extra-box">
+          <p className='count'>{statistics.completedRequests}</p>
+          </div>
+        </div>
+        <div className="box">
+          <div className="content-box">
+            <FaCheckCircle style={{color: '#681016'}} className="icon" />
+            <p className="box-text">Rejected Requests</p>
+          </div>
+          <div className="extra-box">
+            <p className='count'>{statistics.rejectedRequests}</p>
+          </div>
+        </div>
+      </div>
+      <h3 className="calendar-header">REQUESTED DATES</h3>
 
-      <div className="stats-grid1">
-        <div className="stat-card" style={{backgroundColor: '#2d68c0'}}>
-          <h2>Pending Requests</h2>
-          <p className="stat-number">{statistics.pendingRequests}</p>
-        </div>
-        <div className="stat-card" style={{backgroundColor: 'rgb(145, 87, 49)'}}>
-          <h2>In Progress Requests</h2>
-          <p className="stat-number">{statistics.inProgressRequests}</p>
-        </div>
-        <div className="stat-card" style={{backgroundColor: 'rgb(23, 153, 40)'}}>
-          <h2>Completed Requests</h2>
-          <p className="stat-number">{statistics.completedRequests}</p>
-        </div>
-        <div className="stat-card" style={{backgroundColor: 'rgb(134, 14, 14)'}}>
-          <h2>Rejected Requests</h2>
-          <p className="stat-number">{statistics.rejectedRequests}</p>
-        </div>
+      <div className="calendar-container">
+        <Calendar onChange={setDate} value={date} />
       </div>
     </div>
   );
