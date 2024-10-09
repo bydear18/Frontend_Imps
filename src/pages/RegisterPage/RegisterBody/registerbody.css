@@ -12,7 +12,7 @@
 @media screen and (min-width: 1368px){
     #signIn {
         text-decoration: underline;
-        width: 3vw;
+        width: 5vw;
     }
 
     #signIn:hover{
@@ -40,7 +40,7 @@
         border-radius: 0.6vw;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 28vw;
-        height: 44vw;
+        height: 47.5vw;
         padding:5vh;
         margin:auto;
         align-items: center;

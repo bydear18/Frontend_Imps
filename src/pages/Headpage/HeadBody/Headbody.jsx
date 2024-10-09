@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Account from './AccountTab/Account';
 import Hometab from './HomeTab/HomeTab';
 import Wildcat from './Wildcat.png';
-import Dashboard from './Dashboard/Dashboard';
+import Dashboard from './Dashboard/HeadDashboard';
 import RequestHistory from './RequestHistory/History';
 import SystemReport from './Reports/Reports';
 import PendingRequests from './PendingRequests/Pending';

@@ -131,10 +131,13 @@ const PrintReq = () => {
         }
     };
     const upload = () => {
-        if(requestType !== 'Select' && department !== '' && noOfCopies >0 && file!=null && useDate !== '' && description !== ''){
+        // Check if file upload is not required due to "handleExam" or "giveFilePersonally" being selected
+        const isFileRequired = !giveExam; // If giveExam is true, no file is needed
+    
+        if (requestType !== 'Select' && department !== '' && noOfCopies > 0 && (file != null || !isFileRequired) && useDate !== '' && description !== '') {
             const data = new FormData();
             data.append('userID', userID);
-            data.append('role', role)
+            data.append('role', role);
             data.append('isHead', isHead);
             data.append('isAdmin', isAdmin);
             data.append('isStaff', isStaff);
@@ -144,7 +147,6 @@ const PrintReq = () => {
             data.append('noOfCopies', noOfCopies);
             data.append('schoolId', schoolId);
             data.append('colored', colorType);
-            data.append('giveExam', giveExam);
             data.append('paperSize', paperSize);
             data.append('paperType', paperType);
             data.append('requestDate', currentDate);
@@ -152,72 +154,104 @@ const PrintReq = () => {
             data.append('name', name);
             data.append('email', email);
             data.append('department', department);
-
+    
             console.log(department);
-            
+    
             const commentData = new FormData();
             commentData.append("sentBy", name);
             commentData.append("header", "Initial Comment");
             commentData.append("content", comment);
             commentData.append("sentDate", currentDate);
             commentData.append("requestID", requestID);
-        
-            if(file != null){
-                setButtonSubmit(true);
-            // Sending File to Firebase Storage
-            storage.ref(`/files/${file.name}`).put(file)
-                .on("state_changed", null, alert, () => {
-     
-                    // Getting Download Link
-                    storage.ref("files")
-                        .child(file.name)
-                        .getDownloadURL()
-                        .then((url) => {
-                            setUrl(url);
-                            data.append('URL', url);
-                            data.append('fileName', file.name); 
     
-                            const requestOptions = {
+            // Proceed with file upload only if file is required and provided
+            if (isFileRequired && file != null) {
+                setButtonSubmit(true);
+                // Sending File to Firebase Storage
+                storage.ref(`files/${file.name}`).put(file)
+                    .on("state_changed", null, alert, () => {
+         
+                        // Getting Download Link
+                        storage.ref("files")
+                            .child(file.name)
+                            .getDownloadURL()
+                            .then((url) => {
+                                setUrl(url);
+                                data.append('URL', url);
+                                data.append('fileName', file.name); 
+        
+                                const requestOptions = {
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    body: data
+                                  };
+    
+                            fetch("http://localhost:8080/requests/newRequest", requestOptions)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    if (comment != null && comment !== '') {
+                                        const requestOptionsComment = {
+                                            method: 'POST',
+                                            mode: 'cors',
+                                            body: commentData,
+                                        };
+                                        fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                console.log(data);
+                                            })
+                                            .catch((error) => {
+                                                console.log(error);
+                                            });
+                                    }
+                                    infoPop('Request submitted successfully!', true);
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        });
+                });
+            } else if (!isFileRequired) {
+                // If file is not required, proceed without file upload
+                const requestOptions = {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: data,
+                };
+                data.append('fileName', 'None');
+                data.append('URL', 'None');
+                data.append('giveExam', giveExam);
+                fetch("http://localhost:8080/requests/newRequest", requestOptions)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (comment != null && comment !== '') {
+                            const requestOptionsComment = {
                                 method: 'POST',
                                 mode: 'cors',
-                                body: data
-                              };
-    
-                              fetch("http://localhost:8080/requests/newRequest", requestOptions).then((response) => response.json()
-                            ).then((data) => {
-                                if (comment != null && comment !== '') {
-                                    const requestOptionsComment = {
-                                        method: 'POST',
-                                        mode: 'cors',
-                                        body: commentData
-                                    };
-                                    fetch("http://localhost:8080/comments/newComment", requestOptionsComment).then((response) => response.json()
-                                    ).then((data) => {
-                                        console.log(data);
-                                    })
-                                        .catch(error => {
-                                            console.log(error);
-                                        }
-                                    );
-                                }
-                                infoPop('Request submitted successfully!', true);
-                            })
-                                .catch(error => {
+                                body: commentData,
+                            };
+                            fetch("http://localhost:8080/comments/newComment", requestOptionsComment)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(data);
+                                })
+                                .catch((error) => {
                                     console.log(error);
-                                }
-                            );
-                        })
-                });
-        }else if(file!=null){
-            infoPop('Please make sure that you attached a file');
+                                });
+                        }
+                        infoPop('Request submitted successfully!', true);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                infoPop('Please make sure that you attached a file');
+            }
+        } else {
+            infoPop('Please make sure you filled up all the fields');
         }
-    } else if(requestType !== 'Select' && department !== '' && noOfCopies >0 && file == null && useDate !== '' && description !== ''){
-            infoPop('Please make sure that you attached a file');
-        }
-    else {
-        infoPop('Please make sure you filled up all the fields');
-    }
-};
+    };
+    
 
     const disableIn = (value) => {
         const requestOptions = {
