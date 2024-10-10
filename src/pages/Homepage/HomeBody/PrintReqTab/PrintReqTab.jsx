@@ -179,7 +179,7 @@ const PrintReq = () => {
                                 setUrl(url);
                                 data.append('URL', url);
                                 data.append('fileName', file.name); 
-        
+                                data.append('giveExam', giveExam);
                                 const requestOptions = {
                                     method: 'POST',
                                     mode: 'cors',

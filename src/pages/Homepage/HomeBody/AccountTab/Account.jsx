@@ -209,7 +209,7 @@ const Account = () => {
                 <div id='accDivider'> </div>
                     <img src={Miming}  id='accIcon'/>
                     <div className='accName'>{lastName}, {firstName}</div>
-                    <div className='accType'>User</div>
+                    <div className='accType'>Employee</div>
                     <div id='inputContainer'>
                         <p className='inLab uwahiNgan'>Last Name</p>
                     <FaUser className='accIcon userIcon' />

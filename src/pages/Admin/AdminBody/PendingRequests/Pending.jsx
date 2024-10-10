@@ -251,7 +251,6 @@ const Pending = () => {
                 setPaperSize(data['paperSize']);
                 setEmail(data['requesterEmail']);
                 setRole(data['role']);
-                
                 console.log(data['schoolId']);
                 setUserID(data['userID']);
                 setRequesterEmail(data['requesterEmail']);

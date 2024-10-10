@@ -166,6 +166,7 @@ const History = ({reqHistory}) => {
                 setColorType(data['colored']);
                 setPaperSize(data['paperSize']);
                 setUserID(data['userID']);
+                setSchoolId(data['schoolId']);
                 setEmail(data['requesterEmail']);
                 setDownloadURL(data['downloadURL']);
                 setRequesterEmail(data['requesterEmail']);
@@ -242,7 +243,7 @@ const History = ({reqHistory}) => {
     const getSeverity = (status) => {
         switch (status) {
             default:
-                return 'info';
+                return 'warning';
 
             case 'Rejected':
                 return 'danger';

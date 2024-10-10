@@ -198,7 +198,7 @@ const Pending = () => {
     const renderHeader = () => {
         return (
             <div id="historyHeader" className="flex">
-                <h1>Pending Requests</h1>
+                <h1>Request History</h1>
                 <IconField iconPosition="left">
                     <InputIcon className="pi pi-search" />
                     <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Search" />
@@ -336,9 +336,9 @@ const Pending = () => {
             },
         };
 
-        fetch("http://localhost:8080/records/pending", requestOptions)
+        fetch("http://localhost:8080/records/all", requestOptions)
             .then((response) => response.json())
-            .then((data) => { setValues(data); })
+            .then((data) => { setValues(data); console.log(data) })
             .catch((error) => {
                 console.log(error);
             });

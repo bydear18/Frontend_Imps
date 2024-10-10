@@ -203,6 +203,7 @@ const History = ({reqHistory}) => {
                 setColorType(data['colored']);
                 setPaperSize(data['paperSize']);
                 setUserID(data['userID']);
+                setSchoolId(data['schoolId']);
                 setEmail(data['requesterEmail']);
                 setDownloadURL(data['downloadURL']);
                 setRequesterEmail(data['requesterEmail']);
@@ -306,16 +307,18 @@ const History = ({reqHistory}) => {
             headers: {
               'Content-Type': 'application/json',
           },
-          };
-        
-        fetch("http://localhost:8080/records/all", requestOptions).then((response)=> response.json()
-        ).then((data) => { setValues(data);})
-        .catch(error =>
-            {
+        };
+    
+        fetch("http://localhost:8080/records/all", requestOptions)
+            .then((response) => response.json())
+            .then((data) => {
+                // Filter out records with status 'Pending'
+                const filteredData = data.filter(record => record.status !== 'Pending');
+                setValues(filteredData);
+            })
+            .catch(error => {
                 console.log(error);
-            }
-        );
-        
+            });
     }, []);
 
     return(

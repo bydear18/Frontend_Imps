@@ -363,11 +363,7 @@ const Pending = () => {
             </div>
             <div id="overlay" className={show} onClick={closeModal}></div>
             <div id="requestBox" className={show}>
-                <div id="infoPopOverlay" className={alert}></div>
-                <div id="infoPop" className={alert}>
-                    <p>{alertMsg}</p>
-                    <button id="infoChangeBtn" onClick={closeInfoPop}>Close</button>
-                </div>
+
                 <div id='boxDeets'>
 
                     <div id='firstLine'>
