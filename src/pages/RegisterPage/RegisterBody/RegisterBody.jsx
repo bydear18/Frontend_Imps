@@ -307,6 +307,7 @@ const RegisterBody = () => {
                         {employeeType === 'office' && (
                             <label>
                                 <select
+                                    style={{marginLeft: '1.5vw'}}
                                     className="regShad"
                                     value={office}
                                     onChange={(e) => setOffice(e.target.value)}

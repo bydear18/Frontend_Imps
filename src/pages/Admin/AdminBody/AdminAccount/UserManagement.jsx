@@ -22,20 +22,30 @@ const UserManagement = () => {
   const [schoolId, setSchoolId] = useState('');
   const [role, setRole] = useState('staff');
   const navigate = useNavigate();
+
+
   const renderHeader = () => {
     return (
       <div id="userHeader" className="flex">
-        <h1>User Management Registration</h1>
+        <h1>Employee Management</h1>
       </div>
     );
   };
   
+  const renderStaffHeader = () => {
+    return (
+      <div id="userHeader" className="flex">
+        <h1>Staff Management</h1>
+      </div>
+    );
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
 
   const header = renderHeader();
-
+  const staffHeader = renderStaffHeader();
   const handleLogOut = () => {
     localStorage.setItem('firstName', '');
     localStorage.setItem('lastName', '');
@@ -50,11 +60,27 @@ const UserManagement = () => {
     setAlertMsg(message);
     setSuccess(isSuccess);
   };
-
+  const fetchData = () => {
+    fetch('http://localhost:8080/services/all')
+      .then((response) => response.json())
+      .then((data) => {
+        const filteredUsers = data.filter(
+          (user) => user.role === 'staff'
+        );
+        setValues(filteredUsers);
+      })
+      .catch((error) => {
+        console.error('Error fetching staff list:', error);
+      });
+  };
   const closeInfoPop = () => {
     setAlert('hide');
     if (success) {
-      navigate('/admin');
+      window.location.reload();
+    } else {
+      setTimeout(() => {
+        fetchData();
+      }, 1000);
     }
   };
 
@@ -140,16 +166,43 @@ const UserManagement = () => {
   };
 
   const roleBodyTemplate = (rowData) => {
-    return (
-      <div>
-        <button onClick={() => handleAccept(rowData.email)} className='accept-button'>
-          Accept
-        </button>
-        <button onClick={() => handleDecline(rowData.email)} className='decline-button'>
-          Decline
-        </button>
-      </div>
-    );
+    if(rowData.role === 'staff'){
+      return (
+        <div>
+          <button onClick={() => handleAccept(rowData.email)} className='accept-button'>
+            Edit
+          </button>
+          <button onClick={() => handleDecline(rowData.email)} className='decline-button'>
+            Delete
+          </button>
+        </div>
+      );
+    }
+    else if(rowData.role === 'employee' && rowData.adminVerified === true){
+        return (
+          <div>
+            <button onClick={() => handleAccept(rowData.email)} className='accept-button'>
+              Edit
+            </button>
+            <button onClick={() => handleDecline(rowData.email)} className='decline-button'>
+              Delete
+            </button>
+          </div>
+        );
+    }
+    else{
+      return (
+        <div>
+          <button onClick={() => handleAccept(rowData.email)} className='accept-button'>
+            Accept
+          </button>
+          <button onClick={() => handleDecline(rowData.email)} className='decline-button'>
+            Decline
+          </button>
+        </div>
+      );
+    }
+
   };
   const closeButton = ()=>{
     setIsModalOpen(false);
@@ -177,7 +230,6 @@ const UserManagement = () => {
     const isValidSchoolId = /^\d{2}-\d{4}-\d{3}$/;
     const isValidEmail = /^[a-zA-Z0-9._%+-]+@cit\.edu$/;
 
-    // Input validations
     if (!firstName || !lastName || !email || !password || !schoolId) {
       showInfoPop('All fields are required.');
         return;
@@ -194,30 +246,28 @@ const UserManagement = () => {
     }
 
 
-    // Check for existing email
     fetch(`http://localhost:8080/services/exists?email=${email}`, requestOptionsGET)
         .then((response) => response.json())
         .then((data) => {
             if (data === true) {
               showInfoPop('That email is already in use! Please use another email.');
             } else {
-                // Check for existing school ID
                 fetch(`http://localhost:8080/services/exists?schoolId=${schoolId}`, requestOptionsGET)
                     .then((response) => response.json())
                     .then((data) => {
                         if (data === true) {
                           showInfoPop('That School ID is already in use! Please use another School ID.');
                         } else {
-                            // Proceed with registration
                             fetch(`http://localhost:8080/services/NewStaffRegistration?firstName=${firstName}&lastName=${lastName}&password=${password}&email=${email}&schoolId=${schoolId}&role=${role}`, requestOptionsPOST)
                                 .then((response) => response.json())
                                 .then(() => {
-                                    // Clear form fields
                                     setFirstName('');
                                     setLastName('');
                                     setPassword('');
                                     setEmail('');
                                     setSchoolId('');
+                                    showInfoPop('Successfully Added Staff');
+                                    
                                 })
                                 .catch(error => {
                                     console.log(error);
@@ -245,9 +295,9 @@ const UserManagement = () => {
         </div>
         <div id="usersTable">
             <DataTable
-                value={values.filter(user => user.adminVerified === false)} 
+                value={values.filter(user => user.role === 'employee')} 
                 scrollable
-                scrollHeight="28vw"
+                scrollHeight="15vw"
                 header={header}
                 emptyMessage="No data found."
                 tableStyle={{ minWidth: '20vw' }}
@@ -346,12 +396,12 @@ const UserManagement = () => {
         )}
 
 
-        <div id="usersTable">
+        <div id="usersTable" style={{marginTop: '-2vw'}}>
             <DataTable
                 value={values.filter(user => user.role === 'staff')} 
                 scrollable
-                scrollHeight="28vw"
-                header={header}
+                scrollHeight="15vw"
+                header={staffHeader}
                 emptyMessage="No data found."
                 tableStyle={{ minWidth: '20vw' }}
                 selectionMode="single"
@@ -365,8 +415,6 @@ const UserManagement = () => {
             </DataTable>
         </div>
 
-        
-        <button id="logOut" onClick={handleLogOut}>Log Out</button>
     </div>
 );
 
