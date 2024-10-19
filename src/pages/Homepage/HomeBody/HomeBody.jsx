@@ -37,31 +37,27 @@ function HomeBody () {
         <div id='layer'>
             <div id="container">
                 <div className={toggleState === 1 ? "tab active-tab" : "tab"} onClick={() => toggleTab(1)}>Home</div>
-                <div className={toggleState === 2 ? "tab active-tab" : "tab"} onClick={() => toggleTab(2)}>Request Feedback</div>
-                <div className={toggleState === 3 ? "tab active-tab" : "tab"} onClick={() => toggleTab(3)}>Print Request</div>
-                <div className={toggleState === 4 ? "tab active-tab" : "tab"} onClick={() => toggleTab(4)}>Print Record</div>
-                <div className={toggleState === 5 ? "tab active-tab" : "tab"} onClick={() => toggleTab(5)}>Account</div>
+                <div className={toggleState === 2 ? "tab active-tab" : "tab"} onClick={() => toggleTab(2)}>Print Request</div>
+                <div className={toggleState === 3 ? "tab active-tab" : "tab"} onClick={() => toggleTab(3)}>Print Record</div>
+                <div className={toggleState === 4 ? "tab active-tab" : "tab"} onClick={() => toggleTab(4)}>Request Feedback</div>
             </div>
 
 
             <div className={toggleState === 1 ? "content active-content" : "content"} onClick={() => toggleTab(1)}>
                 <Hometab/>
             </div>
-        
-            <div className={toggleState === 2 ? "content active-content" : "content"} onClick={() => toggleTab(2)}>
-                <RequestFeedback/>
-            </div>
 
-            <div className={toggleState === 3 ? "content active-content" : "content"} onClick={() => toggleTab(3)}>
+
+            <div className={toggleState === 2 ? "content active-content" : "content"} onClick={() => toggleTab(2)}>
             <PrintReq onRequestSubmitted={navigateToFeedback}/>
             </div>
 
-            <div className={toggleState === 4 ? "content active-content" : "content"} onClick={() => toggleTab(4)}>
+            <div className={toggleState === 3 ? "content active-content" : "content"} onClick={() => toggleTab(3)}>
                 <Record/>
             </div>
-
-            <div className={toggleState === 5 ? "content active-content" : "content"} onClick={() => toggleTab(5)}>
-                <Account/>
+        
+            <div className={toggleState === 4 ? "content active-content" : "content"} onClick={() => toggleTab(4)}>
+                <RequestFeedback/>
             </div>
 
             <img src={Wildcat}/>

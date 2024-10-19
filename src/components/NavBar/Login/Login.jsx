@@ -58,6 +58,7 @@ const Login = () => {
                           localStorage.setItem("lastName", data['lastName']);
                           localStorage.setItem("schoolId", data['schoolId']);
                           localStorage.setItem("role", data['role']);
+                          localStorage.setItem("college", data['college']);
                           
 
                           fetch("http://localhost:8080/services/getid?email=" + email, requestOptions)

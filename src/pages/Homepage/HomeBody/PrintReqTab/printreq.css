@@ -147,12 +147,7 @@
         box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     }
 
-    /* .emailPR {
-        position:absolute;
-        margin-left: 3vw;
-        top: 28.7vw;
-        font-size: 0.78vw;
-    } */
+
 
     .emailText{
         position:absolute;
@@ -166,12 +161,6 @@
         box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     }
 
-    /* .numberPR {
-        position:absolute;
-        margin-left: 3vw;
-        top: 30.55vw;
-        font-size: 0.78vw;
-    } */
 
     .numberText {
         position:absolute;
@@ -511,6 +500,13 @@
         top: 34.5vw;
         font-weight: 600;
     }
+    .college {
+        position:absolute;
+        margin-left: 3vw;
+        font-size: 0.78vw;
+        top: 38.5vw;
+        font-weight: 600;
+    }
 
 
     #reqType {
@@ -672,7 +668,17 @@
         border-radius: 0.1vw;
         box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
     }
-
+    .collegeText {
+        position:absolute;
+        left: 31.7vw;
+        top: 40vw;
+        height: 1.5vw;
+        width: 13vw;
+        font-size: 0.78vw;
+        resize:none;
+        border-radius: 0.1vw;
+        box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+    }
     input{
         border-style: none;
         height: 2vw !important;
@@ -694,7 +700,7 @@
     .comments {
         position:absolute;
         margin-left: 3vw;
-        top: 39.3vw;
+        top: 42.3vw;
         font-size: 0.78vw;
         font-style: bold;
         font-weight: 750;
@@ -703,7 +709,7 @@
     .commentBox {
         position:absolute;
         left: 31.7vw;
-        top: 41vw;
+        top: 44vw;
         font-size: 0.78vw;
         width: 17vw;
         height: 5.2vw !important;

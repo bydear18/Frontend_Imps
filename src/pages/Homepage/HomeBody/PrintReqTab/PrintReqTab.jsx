@@ -48,6 +48,7 @@ function PrintReq({ onRequestSubmitted }) {
     //Contact Info
     const name = localStorage.getItem("firstName") + " " +  localStorage.getItem("lastName");
     const [department, setDepartment] = useState('');
+    const [college, setCollege] = useState('');
     const [role, setRole] = useState('');
     const [giveExam, setGiveExam] = useState(false);
 
@@ -55,11 +56,14 @@ function PrintReq({ onRequestSubmitted }) {
         const userDepartment = localStorage.getItem("department");
         if (userDepartment) {
             setDepartment(userDepartment);
-
         }
         const userRole = localStorage.getItem("role");
         if (userRole) {
             setRole(userRole);
+        }
+        const userCollege = localStorage.getItem("college");
+        if(userCollege){
+
         }
     }, []);
 
@@ -154,7 +158,7 @@ function PrintReq({ onRequestSubmitted }) {
             data.append('name', name);
             data.append('email', email);
             data.append('department', department);
-    
+            
             console.log(department);
     
             const commentData = new FormData();
@@ -362,7 +366,9 @@ function PrintReq({ onRequestSubmitted }) {
                     <input className='nameText' wrap='soft' placeholder="Name" value={name} disabled={true} />
                     <div className='email'>Email</div>
                     <input className='emailText' wrap='soft' placeholder="Email" value={email} disabled={true} />
-                    <div className='department'>Department - College/Office</div>
+                    <div className='college'>College</div>
+                    <input className='collegeText' wrap='soft' placeholder="College" value={college} disabled={true} />
+                    <div className='department'>Department</div>
                     <input className='departmentText' wrap='soft' placeholder="Department" value={department} disabled={true} />
 
 
