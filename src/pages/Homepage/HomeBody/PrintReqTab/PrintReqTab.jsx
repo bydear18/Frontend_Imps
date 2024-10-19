@@ -3,7 +3,7 @@ import './printreq.css';
 import React, { useState, useEffect } from 'react';
 import storage from '../../../../firebase';
 
-const PrintReq = () => {
+function PrintReq({ onRequestSubmitted }) {
     
     const copies = new RegExp(/^\d{1,4}$/);
 
@@ -20,7 +20,7 @@ const PrintReq = () => {
     const closeInfoPop = () => {
         setAlert('hide');
         if (success) {
-            window.location.href = '/home';
+            window.location.reload();
         }
     };
     const [isAdmin, setIsAdmin] = useState(false);
@@ -134,7 +134,7 @@ const PrintReq = () => {
         // Check if file upload is not required due to "handleExam" or "giveFilePersonally" being selected
         const isFileRequired = !giveExam; // If giveExam is true, no file is needed
     
-        if (requestType !== 'Select' && department !== '' && noOfCopies > 0 && (file != null || !isFileRequired) && useDate !== '' && description !== '') {
+        if (requestType !== 'Select' !== '' && noOfCopies > 0 && (file != null || !isFileRequired) && useDate !== '' && description !== '') {
             const data = new FormData();
             data.append('userID', userID);
             data.append('role', role);
@@ -240,6 +240,7 @@ const PrintReq = () => {
                                 });
                         }
                         infoPop('Request submitted successfully!', true);
+                        
                     })
                     .catch((error) => {
                         console.log(error);
@@ -356,7 +357,7 @@ const PrintReq = () => {
                     <div className='givePerson'>Give examination file personally:</div>
                         <input className='giveExam' type='checkbox' onChange={handleExam} disabled={disable || init}/>
 
-                    <div className='contactInfo'>Contact Information</div>
+                    <div className='contactInfo'>Requester's Information</div>
                     <div className='name'>Name</div>
                     <input className='nameText' wrap='soft' placeholder="Name" value={name} disabled={true} />
                     <div className='email'>Email</div>
@@ -385,11 +386,11 @@ const PrintReq = () => {
 
                 <div className='printBox'>
                         <div className='printInfo'>Print Specifications</div>
-
+                        <div className='no_copies'>No. of Copies:</div>
                         <input className='copyNum' type='number' placeholder="# of Copies" min='0' value={noOfCopies} disabled={init} onChange={handleNoOfCopies} />
                         
-                        <div className='color'>Color:</div>
-                    <select id="paperType" style={{ marginTop: '-2.5vw', marginRight: '-7.5vw' }} defaltValue={colorType} onChange={handleColor} disabled={init}>
+                        <div className='color'>Printing Type:</div>
+                    <select id="paperColor" style={{ marginTop: '-2.5vw', marginRight: '-7.5vw' }} defaltValue={colorType} onChange={handleColor} disabled={init}>
                         <option value="Colored">Colored</option>
                         <option value="B&W">B&W</option>
                     </select>

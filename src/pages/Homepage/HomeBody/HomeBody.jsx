@@ -12,7 +12,7 @@ import Hometab from './HomeTab/HomeTab';
 import PrintReq from './PrintReqTab/PrintReqTab';
 import Record from './RecordTab/RecordTab';
 import Wildcat from './Wildcat.png';
-import Dashboard from './Dashboard/Dashboard';
+import RequestFeedback from './RequestFeedback/Dashboard';
 
 function HomeBody () {
     const navigate = useNavigate()
@@ -21,24 +21,26 @@ function HomeBody () {
         if(localStorage.getItem("isLoggedIn")!=="true"){
             navigate("/");
         }
-    });
+    },[navigate]);
 
     const [toggleState, setToggleState] = useState(1);
 
         const toggleTab = (index) => {
             setToggleState(index);
         }
-
+    const navigateToFeedback = () => {
+            setToggleState(2);
+        };
     return (
 
     <div id="whole">
         <div id='layer'>
             <div id="container">
                 <div className={toggleState === 1 ? "tab active-tab" : "tab"} onClick={() => toggleTab(1)}>Home</div>
-                <div className={toggleState === 5 ? "tab active-tab" : "tab"} onClick={() => toggleTab(5)}>Request Feedback</div>
-                <div className={toggleState === 2 ? "tab active-tab" : "tab"} onClick={() => toggleTab(2)}>Print Request</div>
-                <div className={toggleState === 3 ? "tab active-tab" : "tab"} onClick={() => toggleTab(3)}>Print Record</div>
-                <div className={toggleState === 4 ? "tab active-tab" : "tab"} onClick={() => toggleTab(4)}>Account</div>
+                <div className={toggleState === 2 ? "tab active-tab" : "tab"} onClick={() => toggleTab(2)}>Request Feedback</div>
+                <div className={toggleState === 3 ? "tab active-tab" : "tab"} onClick={() => toggleTab(3)}>Print Request</div>
+                <div className={toggleState === 4 ? "tab active-tab" : "tab"} onClick={() => toggleTab(4)}>Print Record</div>
+                <div className={toggleState === 5 ? "tab active-tab" : "tab"} onClick={() => toggleTab(5)}>Account</div>
             </div>
 
 
@@ -47,19 +49,19 @@ function HomeBody () {
             </div>
         
             <div className={toggleState === 2 ? "content active-content" : "content"} onClick={() => toggleTab(2)}>
-                <PrintReq/>
+                <RequestFeedback/>
             </div>
 
             <div className={toggleState === 3 ? "content active-content" : "content"} onClick={() => toggleTab(3)}>
-                <Record/>
+            <PrintReq onRequestSubmitted={navigateToFeedback}/>
             </div>
 
             <div className={toggleState === 4 ? "content active-content" : "content"} onClick={() => toggleTab(4)}>
-                <Account/>
+                <Record/>
             </div>
 
             <div className={toggleState === 5 ? "content active-content" : "content"} onClick={() => toggleTab(5)}>
-                <Dashboard/>
+                <Account/>
             </div>
 
             <img src={Wildcat}/>

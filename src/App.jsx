@@ -13,7 +13,6 @@ import LoginPage from './pages/LoginPage/LoginPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import Staffpage from './pages/Staffpage/Staffpage';
 import Headpage from './pages/Headpage/Headpage';
-
 const App = () => {
 
   useEffect(() => {

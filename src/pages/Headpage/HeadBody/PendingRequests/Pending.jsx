@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import './headpending.css';
 
 const Pending = () => {
+    const [error, setError] = useState(null);
     const [alert, setAlert] = useState('hide');
     const [alertMsg, setAlertMsg] = useState('');
     const [show, setShow] = useState('hide');
@@ -268,12 +269,16 @@ const Pending = () => {
                         setStatus(data['status']);
 
                         if (data['status'] === 'Rejected') {
+                            setStatus('Rejected');
                             setStatusClass('capsuleRejected');
                         } else if (data['status'] === 'Pending') {
+                            setStatus('Waiting for Approval');
                             setStatusClass('capsulePending');
                         } else if (data['status'] === 'In Progress') {
+                            setStatus('Approved for Printing');
                             setStatusClass('capsuleProgress');
                         } else if (data['status'] === 'Completed') {
+                            setStatus('Ready to Claim');
                             setStatusClass('capsuleCompleted');
                         }
                         fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions)
@@ -301,7 +306,7 @@ const Pending = () => {
             default:
                 return 'info';
 
-            case 'New':
+            case 'New Request':
                 return 'info';
 
             case 'Pending':
@@ -337,13 +342,33 @@ const Pending = () => {
         };
 
         fetch("http://localhost:8080/records/pending", requestOptions)
-            .then((response) => response.json())
-            .then((data) => { setValues(data); })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then((data) => {
+                const updatedData = data.map(item => {
+                    const requestDate = new Date(item.requestDate);
+                    const today = new Date();
+                    requestDate.setHours(0, 0, 0, 0);
+                    today.setHours(0, 0, 0, 0);
+                    console.log(requestDate, today);
+                    return {
+                        ...item,
+                        status: requestDate >= today ? 'New Request' : item.status
+                    };
+                });
+                setValues(updatedData);
+            })
             .catch((error) => {
-                console.log(error);
+                console.error('There was a problem with the fetch operation:', error);
+                setError('Failed to fetch data. Please try again later.');
             });
     }, []);
 
+    
     return (
         <div>
 
@@ -437,8 +462,8 @@ const Pending = () => {
                 
                 <div id='columnizer'>
                     <a id='pendingGetRequest' href={downloadURL} target="_blank" download onClick={closeModal}>Get Request File</a>
-                    <button id='approved' className='pendButtons' onClick={handleAccept}>Accept</button>
                     <button id='rejected' className='pendButtons' onClick={handleReject}>Reject</button>
+                    <button id='approved' className='pendButtons' onClick={handleAccept}>Accept</button>
                 </div>
             </div>
         </div>

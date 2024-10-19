@@ -177,19 +177,18 @@ const RegisterBody = () => {
     
 
     return (
-        <div className="main section">
+        <div className="form-container">
             <div id="infoPopOverlay" className={alert}></div>
             <div id="infoPop" className={alert}>
                 <p>{alertMsg}</p>
                 <button id="infoChangeBtn" onClick={closeInfoPop}>Close</button>
             </div>
-    
-            <div className="title"></div>
-            <div id="regLogCon">
-                <h2>Registration</h2>
-                <form id="loginForm" className="two-column-form">
-                    <div className="left-column">
-                        <label>
+            <form>
+                <h2 style={{marginBottom: '4vw'}}>Registration</h2>
+                <div className="form-row">
+                    {/* First Column */}
+                    <div className="column">
+                    <label>
                             <FaUser />
                             <input
                                 className="regShad"
@@ -201,6 +200,7 @@ const RegisterBody = () => {
                             />
                         </label>
                         <label>
+                            <FaUser />
                             <input
                                 className="regInput regShad"
                                 required
@@ -210,7 +210,6 @@ const RegisterBody = () => {
                                 placeholder="Last Name"
                             />
                         </label>
-                        <hr className="regLine" />
                         <label>
                             <HiAtSymbol id="emailSym" />
                             <input
@@ -222,7 +221,6 @@ const RegisterBody = () => {
                                 placeholder="Email"
                             />
                         </label>
-                        <hr className="regLine" />
                         <label>
                             <FaLock />
                             <input
@@ -244,7 +242,9 @@ const RegisterBody = () => {
                             />
                         </label>
                     </div>
-                    <div className="right-column">
+
+                    {/* Second Column */}
+                    <div className="column">
                         <label>
                             <HiIdentification />
                             <input
@@ -255,12 +255,9 @@ const RegisterBody = () => {
                                 placeholder="School ID (xx-xxxx-xxx)"
                             />
                         </label>
-    
-                        {/* New Employee Type Dropdown */}
-                        <label>
-                            <select
-                                style={{ marginTop: '1vw' }}
-                                className="regShad"
+                        <label htmlFor="employeeType">Employee Type</label>
+                        <select
+                                style={{fontSize: '.85em', marginLeft: '1.5vw'}}
                                 value={employeeType}
                                 onChange={(e) => setEmployeeType(e.target.value)}
                                 required
@@ -268,15 +265,13 @@ const RegisterBody = () => {
                                 <option value="" disabled>Select Employee Type</option>
                                 <option value="faculty">Faculty Employee</option>
                                 <option value="office">Office Employee</option>
-                            </select>
-                        </label>
-    
-                        {/* Show College and Department if Faculty Employee */}
+                        </select>
+                
                         {employeeType === 'faculty' && (
                             <>
                                 <label>
                                     <select
-                                        style={{ marginTop: '.5vw' }}
+                                    style={{marginLeft: '1.5vw'}}
                                         className="regShad"
                                         value={college}
                                         onChange={(e) => setCollege(e.target.value)}
@@ -292,7 +287,7 @@ const RegisterBody = () => {
                                 {college && (
                                     <label>
                                         <select
-                                            style={{ marginTop: '.5vw' }}
+                                        style={{marginLeft: '1.5vw'}}
                                             className="regShad"
                                             value={department}
                                             onChange={(e) => setDepartment(e.target.value)}
@@ -312,7 +307,6 @@ const RegisterBody = () => {
                         {employeeType === 'office' && (
                             <label>
                                 <select
-                                    style={{ marginTop: '.5vw' }}
                                     className="regShad"
                                     value={office}
                                     onChange={(e) => setOffice(e.target.value)}
@@ -326,20 +320,19 @@ const RegisterBody = () => {
                             </label>
                         )}
                     </div>
-    
-                    <div className="buttons">
-                        <button className="login-btn" type="button" onClick={handleRegister}>
+                </div>
+
+                <div className="register-button">
+                        <button className="register-button" type="button" onClick={handleRegister}>
                             Register
                         </button>
                     </div>
-    
-                    <div className="aregistered">
+
+                <div className="aregistered">
                         <p id="regQues">ALREADY REGISTERED? </p>
                     </div>
                     <a id="signIn" href="/"> Sign In</a>
-                </form>
-            </div>
-            <div className="cit-bglogo"></div>
+            </form>
         </div>
     );
     

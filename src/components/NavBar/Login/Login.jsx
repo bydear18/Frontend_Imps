@@ -126,10 +126,10 @@ const Login = () => {
           <button id='infoChangeBtn' onClick={closeInfoPop}>Close</button>
         </div>
       <div className='title'>
-        <h1>INSTRUCTIONAL MATERIAL PRINTING REQUEST</h1>
+        <h1 style={{color: '#8f271a'}}>INSTRUCTIONAL MATERIAL PRINTING REQUEST</h1>
       </div>
       <div className='login-container'>
-        <h2>User Login</h2>
+        <h2 style={{color: '#8f271a', fontWeight: 'bold'}}>User Login</h2>
         {isLoggedIn ? (
           <p>You are logged in!</p>
         ) : (

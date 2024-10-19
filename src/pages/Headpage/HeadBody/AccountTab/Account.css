@@ -186,11 +186,11 @@
     #accCont {
         position: relative;
         width: 50vw;
-        height: 36vw;
+        height: 32vw;
         border-style: solid;
         border-width: 0;
         border-radius: 0.5vw;
-        background-color: rgba(235, 235, 235,0.8);
+        background: linear-gradient(to bottom, white, #fde59c);
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
     
@@ -202,7 +202,7 @@
         border-width: 0.2px;
         border-color: gray;
         width: 1px;
-        height: 32.5vw;
+        height: 29vw;
     }
     
     #accIcon {

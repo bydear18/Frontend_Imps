@@ -185,13 +185,17 @@ const History = ({reqHistory}) => {
                         setCommentDisabled('show');
                     }
 
-                    if(data['status'] === 'Rejected'){
+                    if (data['status'] === 'Rejected') {
+                        setStatus('Rejected');
                         setStatusClass('capsuleRejected');
-                    }else if(data['status'] === 'Pending'){
+                    } else if (data['status'] === 'Pending') {
+                        setStatus('Waiting for Approval');
                         setStatusClass('capsulePending');
-                    }else if(data['status'] === 'In Progress'){
+                    } else if (data['status'] === 'In Progress') {
+                        setStatus('Approved for Printing');
                         setStatusClass('capsuleProgress');
-                    }else if(data['status'] === 'Completed'){
+                    } else if (data['status'] === 'Completed') {
+                        setStatus('Ready to Claim');
                         setStatusClass('capsuleCompleted');
                     }
                     fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
@@ -248,12 +252,14 @@ const History = ({reqHistory}) => {
             case 'Rejected':
                 return 'danger';
 
-            case 'In Progress':
+            case 'Approved for Printing':
                 return 'info';
 
-            case 'Completed':
+            case 'Ready to Claim':
                 return 'success';
 
+            case 'Claimed':
+                return 'success';
             case '':
                 return null;
         }
@@ -268,22 +274,31 @@ const History = ({reqHistory}) => {
             method: 'GET',
             mode: 'cors',
             headers: {
-              'Content-Type': 'application/json',
-          },
+                'Content-Type': 'application/json',
+            },
         };
     
         fetch("http://localhost:8080/records/all", requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                // Filter out records with status 'Pending'
-                const filteredData = data.filter(record => record.status !== 'Pending');
-                setValues(filteredData);
+                const statusMap = {
+                    'Pending': 'Waiting for Approval',
+                    'In Progress': 'Approved for Printing',
+                    'Completed': 'Ready to Claim',
+                };
+
+                const updatedData = data.map(item => ({
+                    ...item,
+                    status: statusMap[item.status] || item.status, 
+                }));
+    
+                setValues(updatedData);
+                console.log(updatedData);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     }, []);
-    
 
     return(
         <div>

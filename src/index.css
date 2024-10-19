@@ -1,6 +1,6 @@
 :root {
-  --PrimaryColor: hsl(356, 41%, 39%);
-  --MainYellow: hsl(47, 94%, 49%);
+  --PrimaryColor:#8f271a;
+  --MainYellow: #f4c108;
   --SecondaryColor: hsl(0, 0%, 91%);
   --colorOne: hsl(15, 74%, 70%);
   --colorTwo: hsl(28,100%,82%);
@@ -156,7 +156,7 @@ code {
 
 
 .login-container {
-  background-color: var(--SecondaryColor);
+  background: linear-gradient(to bottom, white, #fde59c);
   border-radius: 0.6vw;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 28vw;
@@ -197,6 +197,7 @@ form {
 
 #loginForm input{
   width: 20vw;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 label {
@@ -213,13 +214,13 @@ label svg {
 input {
   padding: 0.7vw;
   margin-bottom: 0.7vw;
-  border: 1px solid #ccc;
+  border: 1px solid #333131;
   border-radius: 0.6vw;
   width: 19vw;
 }
 
 .register-btn{
-  background-color: #8c3a3f;
+  background-color: #8f271a;
   color: #f4c108;
   font-weight: 600;
   border: none;
@@ -233,13 +234,16 @@ input {
 }
 
 .login-btn {
-  background-color: #8c3a3f;
+  background-color: #8f271a;
   color: #f4c108;
   font-weight: 600;
   border: none;
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
 }
+
+
+
 
 .login-btn:hover {
   background-color: #4d0005;
@@ -248,7 +252,7 @@ input {
 
 .clear-btn {
   background-color: #f4c108;
-  color: #8c3a3f;
+  color: #8f271a;
   font-weight: 600;
   border: none;
   cursor: pointer;
@@ -306,7 +310,7 @@ input {
 }
 
 .fpass p{
-  color: #8c3a3f;
+  color: #8f271a;
   font-size: 1.1vw;
 }
 

@@ -268,14 +268,20 @@ const Pending = () => {
                         setStatus(data['status']);
 
                         if (data['status'] === 'Rejected') {
+                            setStatus('Rejected');
                             setStatusClass('capsuleRejected');
                         } else if (data['status'] === 'Pending') {
+                            setStatus('Waiting for Approval');
                             setStatusClass('capsulePending');
                         } else if (data['status'] === 'In Progress') {
+                            setStatus('Waiting to be Complete');
                             setStatusClass('capsuleProgress');
                         } else if (data['status'] === 'Completed') {
+                            setStatus('Ready to Claim');
                             setStatusClass('capsuleCompleted');
                         }
+                        
+
                         fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions)
                             .then((response) => response.json())
                             .then((data) => {
@@ -301,12 +307,16 @@ const Pending = () => {
             default:
                 return 'info';
 
-            case 'New':
-                return 'info';
-
-            case 'Pending':
+            case 'Waiting for Approval':
                 return 'warning';
 
+            case 'Claimed':
+                return 'sucess';
+
+            case 'Ready to Claim':
+                    return 'success';
+            case 'Rejected':
+                return 'danger';
             case '':
                 return null;
         }
@@ -335,15 +345,28 @@ const Pending = () => {
                 'Content-Type': 'application/json',
             },
         };
-
+    
         fetch("http://localhost:8080/records/all", requestOptions)
             .then((response) => response.json())
-            .then((data) => { setValues(data); console.log(data) })
+            .then((data) => {
+                const statusMap = {
+                    'Pending': 'Waiting for Approval',
+                    'In Progress': 'Approved for Printing',
+                    'Completed': 'Ready to Claim',
+                };
+
+                const updatedData = data.map(item => ({
+                    ...item,
+                    status: statusMap[item.status] || item.status, 
+                }));
+    
+                setValues(updatedData);
+                console.log(updatedData);
+            })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
-
     return (
         <div>
 

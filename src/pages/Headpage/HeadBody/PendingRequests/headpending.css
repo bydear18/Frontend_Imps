@@ -214,7 +214,7 @@
 
 .capsulePending {
     text-align: center;
-    width: 6.5vw;
+    width: 8.5vw;
     font-size: 0.7vw;
     font-weight: 700;
     height: 1.2vw;
@@ -232,7 +232,7 @@
 
 .capsuleRejected {
     text-align: center;
-    width: 6.5vw;
+    width: 8.5vw;
     font-size: 0.7vw;
     font-weight: 700;
     height: 1.2vw;
@@ -250,7 +250,7 @@
 
 .capsuleProgress {
     text-align: center;
-    width: 6.5vw;
+    width: 8.5vw;
     font-size: 0.7vw;
     font-weight: 700;
     height: 1.2vw;
@@ -268,7 +268,7 @@
 
 .capsuleCompleted {
     text-align: center;
-    width: 6.5vw;
+    width: 8.5vw;
     font-size: 0.7vw;
     font-weight: 700;
     height: 1.2vw;
