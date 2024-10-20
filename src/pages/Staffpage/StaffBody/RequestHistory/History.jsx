@@ -202,6 +202,7 @@ const History = ({reqHistory}) => {
                 setNoOfCopies(data['noOfCopies']);
                 setColorType(data['colored']);
                 setPaperSize(data['paperSize']);
+                setPaperType(data['paperType']);
                 setUserID(data['userID']);
                 setSchoolId(data['schoolId']);
                 setEmail(data['requesterEmail']);

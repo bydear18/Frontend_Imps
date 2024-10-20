@@ -54,7 +54,9 @@ const History = ({reqHistory}) => {
     const [requesterName, setRequesterName] = useState('');
     const [requesterEmail, setRequesterEmail] = useState('');
     const [contactNumber, setContactNumber] = useState('');
-
+    const [alert, setAlert] = useState('hide');
+    const [alertMsg, setAlertMsg] = useState('');
+    const [success, setSuccess] = useState(false);
     // Comment Details
     const [commentHeader, setCommentHeader] = useState('');
     const [commentContent, setCommentContent] = useState('');
@@ -90,6 +92,51 @@ const History = ({reqHistory}) => {
         setCommentShow('show');
     }
 
+    const createComment = () => {
+        const commentData = new FormData();
+        commentData.append("sentBy", "Admin");
+        commentData.append("header", commentHeader);
+        commentData.append("content", commentContent);
+        commentData.append("sentDate", commentDate);
+        commentData.append("requestID", requestID);
+        
+        const requestOptions = {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            };
+            if(commentContent!=null && commentContent!==''){
+                const requestOptionsComment = {
+                    method: 'POST',
+                    mode: 'cors',
+                    body: commentData
+                  };
+                fetch("http://localhost:8080/comments/newAdminComment", requestOptionsComment).then((response)=> response.json()
+                                        ).then((data) => {
+                                            fetch("http://localhost:8080/comments/id?id=" + requestID, requestOptions).then((response)=> response.json()
+                                            ).then((data) => { 
+                                                setComments(data);
+                                                setEditable(true);
+                                                setButtonShow('hide');
+                                                setCommentShow('hide');
+                                            })
+                                            .catch(error =>
+                                            {
+                                                console.log(error);
+                                            }
+                                            );
+                                        })
+                                        .catch(error =>
+                                        {
+                                            console.log(error);
+                                        }
+                                    );
+                }
+
+    }
+
     const handleComplete = () => {
         setCompleteDisable(true);
         const requestOptions = {
@@ -99,7 +146,7 @@ const History = ({reqHistory}) => {
               'Content-Type': 'application/json',
             },
             };
-            fetch("http://localhost:8080/records/completedStatus?requestID=" + requestID + "&role=" + role + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
+            fetch("http://localhost:8080/records/completedStatus?requestID=" + requestID + "&status=Completed&email=" + email  + "&userID=" + userID + "&date=" + currentDate, requestOptions).then((response)=> response.json()
             ).then((data) => {window.location.reload();})
             .catch(error =>
                 {
@@ -164,6 +211,7 @@ const History = ({reqHistory}) => {
                 setRequestID(data['requestID']);
                 setNoOfCopies(data['noOfCopies']);
                 setColorType(data['colored']);
+                setPaperType(data['paperType']);
                 setPaperSize(data['paperSize']);
                 setUserID(data['userID']);
                 setSchoolId(data['schoolId']);
@@ -175,23 +223,18 @@ const History = ({reqHistory}) => {
                 fetch("http://localhost:8080/records/requestid?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
                 ).then((data) => { 
                     setStatus(data['status']);
-                    if(data['status'] === 'Rejected'){
-                        setRejected('show');
-                        setCommentDisabled('hide');
-                    }else if (data['status'] === 'Completed'){
-                        setRejected('hide');
-                    }else{
-                        setRejected('show');
-                        setCommentDisabled('show');
-                    }
-
-                    if(data['status'] === 'Rejected'){
+ 
+                    if (data['status'] === 'Rejected') {
+                        setStatus('Rejected');
                         setStatusClass('capsuleRejected');
-                    }else if(data['status'] === 'Pending'){
+                    } else if (data['status'] === 'Pending') {
+                        setStatus('Waiting for Approval');
                         setStatusClass('capsulePending');
-                    }else if(data['status'] === 'In Progress'){
+                    } else if (data['status'] === 'In Progress') {
+                        setStatus('Approved for Printing');
                         setStatusClass('capsuleProgress');
-                    }else if(data['status'] === 'Completed'){
+                    } else if (data['status'] === 'Completed') {
+                        setStatus('Ready to Claim');
                         setStatusClass('capsuleCompleted');
                     }
                     fetch("http://localhost:8080/comments/id?id=" + event.data.requestID, requestOptions).then((response)=> response.json()
@@ -248,12 +291,14 @@ const History = ({reqHistory}) => {
             case 'Rejected':
                 return 'danger';
 
-            case 'In Progress':
+            case 'Approved for Printing':
                 return 'info';
 
-            case 'Completed':
+            case 'Ready to Claim':
                 return 'success';
 
+            case 'Claimed':
+                return 'success';
             case '':
                 return null;
         }
@@ -284,70 +329,90 @@ const History = ({reqHistory}) => {
 
     return(
         <div>
-        <div id="pendingTable">
-            <DataTable value={values} scrollable scrollHeight="30vw" header={header} globalFilterFields={['userID', 'requestID', 'fileName', 'requestDate']}
-                filters={filters} emptyMessage="No records found."
+            <div id="pendingTable">
+            <DataTable value={values} scrollable scrollHeight="28vw" header={header} globalFilterFields={['userID', 'requestID', 'fileName', 'requestDate']} 
+                filters={filters}  emptyMessage="No records found."
                 paginator rows={8}
                 tableStyle={{ minWidth: '20vw' }} selectionMode="single" onRowSelect={onRowSelect}>
                 <Column field="userID" header="User ID"></Column>
-                <Column field="requestID" header="Request ID"sortable></Column>
-                <Column field="fileType" header="File Type"sortable></Column>
+                <Column field="requestID" header="Request ID"></Column>
+                <Column field="fileType" header="File Type"></Column>
                 <Column field="fileName" header="File Name"></Column>
                 <Column field="requestDate" header="Request Date"></Column>
                 <Column field="useDate" header="Use Date"></Column>
-                <Column field="status" header="Status" body={statusBodyTemplate}sortable></Column>
+                <Column field="status" header="Status" body={statusBodyTemplate}></Column>
             </DataTable>
-        </div>
-        <div id="overlay" className={show} onClick={closeModal}></div>
-        <div id="requestBox" className={show}>
-            <div id='boxDeets'>
-
-                <div id='firstLine'>
-                    <h1 id='requestID'>{requestID}</h1>
-                    <div className={statusClass}>{status}</div>
-                    <p id='typeOfFile'>• {fileType}</p>
-                    <p className='dates'>Date Requested: <p id='dateRequest'>{requestDate}</p></p>
-                    <p className='dates'>Date Needed: <p id='dateUse'>{useDate}</p></p>
-                </div>
-
-                <p id='requester'>Request from:<p id='schoolId'>{schoolId}</p></p>
-
-                <div id='fileDeets'>FILE DETAILS</div>
-
-                <div id='secondLine'>
-                    <p>File Name:</p> <input id='nameOfFile' type='text' disabled='true' value={fileName} />
-                </div>
-
-                <textarea id='descriptionOfFile' disabled='true' value={desc}>{desc}</textarea>
-
-                <div id='thirdLine'>
-                    <div id='hatagExam'>Give exam personally: </div>
-                    <input id='examBox' type='checkbox' checked={giveExam} disabled='true' />
-                </div>
-                <br></br>
-                <div id='fileDeets' style={{marginBottom:'.5vw'}}>PRINT SPECS</div>
-
-                <div id='fourthLine'>
-                    <p id='coloredBa'>Color Type:<p className='specText'>{colorType}</p>
-                        <div id='numberCopies' style={{marginBottom:'.5vw'}}># of Copies: <p className='specText'>{noOfCopies}</p>
-                        </div>
-                    </p>
-                </div>
-                <div id='fourthLine'>
-                    <p id='coloredBa' style={{marginTop: '-1vw'}}>Paper Size:<p className='specText'>{paperSize}</p>
-                        <div id='numberCopies'>PaperType: <p className='specText'>{paperType}</p></div>
-                    </p>
-                <br></br>
-                </div>
-                <div id='contactDeets' style={{marginBottom:'.5vw'}}>REQUESTER'S INFORMATION</div>
-                <div className='infoLine'>Name: <div className='contactItem'>{requesterName}</div></div>
-                <div className='infoLine'>Email: <div className='contactItem'>{requesterEmail}</div></div>
-                <div className='infoLine'>Department/Office/College: <div className='contactItem'>{department}</div></div>
-
             </div>
-            <p id='additionalInstructions'>{title}</p>
-            <textarea id='instruction' disabled='true' value={content}>{content}</textarea>
+            <div id="overlay" className = {show} onClick={closeModal}></div>
+                <div id="requestBox" className ={show}>
+                <div id='boxDeets'>
 
+                    <div id='firstLine'>
+                        <h1 id='requestID'>{requestID}</h1>
+                        <div className={statusClass}>{status}</div>
+                        <p id='typeOfFile'>• {fileType}</p>
+                        <p className='dates'>Date Requested: <p id='dateRequest'>{requestDate}</p></p>
+                        <p className='dates'>Date Needed: <p id='dateUse'>{useDate}</p></p>
+                    </div>
+
+                    <p id='requester'>Request from:<p id='schoolId'>{schoolId}</p></p>
+
+                    <div id='fileDeets'>FILE DETAILS</div>
+
+                    <div id='secondLine'>
+                        <p>File Name:</p> <input id='nameOfFile' type='text' disabled='true' value={fileName} />
+                    </div>
+
+                    <textarea id='descriptionOfFile' disabled='true' value={desc}>{desc}</textarea>
+
+                    <div id='thirdLine'>
+                        <div id='hatagExam'>Give exam personally: </div>
+                        <input id='examBox' type='checkbox' checked={giveExam} disabled='true' />
+                    </div>
+                    <br></br>
+                    <div id='fileDeets' style={{marginBottom:'.5vw'}}>PRINT SPECS</div>
+
+                    <div id='fourthLine'>
+                        <p id='coloredBa'>Color Type:<p className='specText'>{colorType}</p>
+                            <div id='numberCopies' style={{marginBottom:'.5vw'}}>No. of Copies: <p className='specText'>{noOfCopies}</p>
+                            </div>
+                        </p>
+                    </div>
+                    <div id='fourthLine'>
+                        <p id='coloredBa' style={{marginTop: '-1vw'}}>Paper Size:<p className='specText'>{paperSize}</p>
+                            <div id='numberCopies' style={{marginLeft: '2.9vw'}}> PaperType: <p className='specText'>{paperType}</p></div>
+                        </p>
+                    <br></br>
+                    </div>
+                    <div id='contactDeets' style={{marginBottom:'.5vw'}}>REQUESTER'S INFORMATION</div>
+                    <div className='infoLine'>Name: <div className='contactItem'>{requesterName}</div></div>
+                    <div className='infoLine'>Email: <div className='contactItem'>{requesterEmail}</div></div>
+                    <div className='infoLine'>Department/Office/College: <div className='contactItem'>{department}</div></div>
+
+                    </div>
+                            
+                  
+                            <p id='additionalInstructions'>{title}</p>
+                            <textarea id='instruction' disabled='true' value={content}>{content}</textarea>
+                            <DataTable value={comments} header={commentTableHeader}
+                                    scrollable scrollHeight="17.48vw"
+                                    emptyMessage="No comments found." id='tableOfComments'
+                                    paginator rows={5}
+                                    tableStyle={{ minWidth: '2vw' }} selectionMode="single" onRowSelect={onCommentSelect}>
+                                    <Column field="sentBy" header="Sent by"></Column>
+                                    <Column field="content" header="Content"></Column>
+                                    <Column field="sentDate" header="Date"></Column>
+                            </DataTable>
+
+                            <div id="overlay" className = {commentShow} onClick={closeComment}></div>
+                            <div id="deetCommentBody" className ={commentShow}>
+                                <div id='commBod'>
+                                    <p>{commentDate}</p>
+ 
+                                    <textarea value={commentContent} disabled={editable} id='commContent' placeholder="Enter comment content..." onChange={(e)=>{setCommentContent(e.target.value)}}/>
+                                    <button id='inAdd' className={buttonShow} onClick={createComment}>Add Comment</button>
+                                </div>
+                            </div>
 
                 </div>
         </div>

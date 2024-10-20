@@ -175,7 +175,7 @@ const Navbar = () => {
                             <div id='accDivider'></div>
                             <img src={Miming} id='accIcon' />
                             <div className='accName'>{lastName}, {firstName}</div>
-                            <div className='accType'>Staff</div>
+                            {/* <div className='accType'>Staff</div> */}
                             <div id='inputContainer'>
                                 <p className='inLab uwahiNgan'>Last Name</p>
                                 <FaUser className='accIcon userIcon' />
